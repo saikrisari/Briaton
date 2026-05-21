@@ -1,5 +1,5 @@
 import { openBasket } from './components/basket.js';
-import { openFaq } from './components/FAQ.js';
+import { openFaq } from './components/faq.js';
 import { validate } from './components/form.js';
 import { openLocationList } from './components/locationList.js';
 import { openMainMenu } from './components/mainMenu.js';
