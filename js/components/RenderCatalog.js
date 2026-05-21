@@ -3,25 +3,31 @@ export const renderCatalog = async () => {
   const products = await response.json();
 
   const catalogList = document.querySelector(".catalog__list");
-  const checkboxes = document.querySelectorAll(".custom-checkbox__field[name='type']");
-  const availabilityRadios = document.querySelectorAll(".custom-radio__field[name='status']");
+  const checkboxes = document.querySelectorAll(
+    ".custom-checkbox__field[name='type']",
+  );
+  const availabilityRadios = document.querySelectorAll(
+    ".custom-radio__field[name='status']",
+  );
   const sortSelect = document.querySelector(".catalog__sort-select");
 
   const isAvailable = (product) => {
-    return product.availability.moscow > 0 ||
+    return (
+      product.availability.moscow > 0 ||
       product.availability.orenburg > 0 ||
-      product.availability.saintPetersburg > 0;
+      product.availability.saintPetersburg > 0
+    );
   };
 
   const sortProducts = (productsToSort) => {
     const sortValue = sortSelect.value;
 
     switch (sortValue) {
-      case 'price-min':
+      case "price-min":
         return [...productsToSort].sort((a, b) => a.price.new - b.price.new);
-      case 'price-max':
+      case "price-max":
         return [...productsToSort].sort((a, b) => b.price.new - a.price.new);
-      case 'rating-max':
+      case "rating-max":
         return [...productsToSort].sort((a, b) => b.rating - a.rating);
       default:
         return productsToSort;
@@ -30,20 +36,22 @@ export const renderCatalog = async () => {
 
   const filterProducts = () => {
     const selectedTypes = Array.from(checkboxes)
-      .filter(cb => cb.checked)
-      .map(cb => cb.value);
+      .filter((cb) => cb.checked)
+      .map((cb) => cb.value);
 
-    const availabilityFilter = document.querySelector(".custom-radio__field[name='status']:checked").value;
+    const availabilityFilter = document.querySelector(
+      ".custom-radio__field[name='status']:checked",
+    ).value;
 
     let filtered = products;
 
     if (selectedTypes.length > 0) {
-      filtered = filtered.filter(item =>
-        selectedTypes.some(type => item.type.includes(type))
+      filtered = filtered.filter((item) =>
+        selectedTypes.some((type) => item.type.includes(type)),
       );
     }
 
-    if (availabilityFilter === 'instock') {
+    if (availabilityFilter === "instock") {
       filtered = filtered.filter(isAvailable);
     }
 
@@ -51,10 +59,10 @@ export const renderCatalog = async () => {
   };
 
   const renderProducts = (items) => {
-    catalogList.innerHTML = '';
-    items.forEach(product => {
-      const productItem = document.createElement('li');
-      productItem.classList.add('catalog__item');
+    catalogList.innerHTML = "";
+    items.forEach((product) => {
+      const productItem = document.createElement("li");
+      productItem.classList.add("catalog__item");
       productItem.innerHTML = `
         <div class='product-card'>
           <div class='product-card__visual'>
@@ -79,7 +87,7 @@ export const renderCatalog = async () => {
               <span class='product-card__old-add'>₽</span>
             </span>
             <span class='product-card__price'>
-              <span class='product-card__price-number'>${product.price.new.toLocaleString('ru-RU')}</span>
+              <span class='product-card__price-number'>${product.price.new.toLocaleString("ru-RU")}</span>
               <span class='product-card__price-add'>₽</span>
             </span>
             <div class='product-card__tooltip tooltip'>
@@ -111,30 +119,35 @@ export const renderCatalog = async () => {
   };
 
   const updateCounters = () => {
-    checkboxes.forEach(checkbox => {
+    checkboxes.forEach((checkbox) => {
       const value = checkbox.value;
-      const countElement = checkbox.nextElementSibling.querySelector(".custom-checkbox__count");
-      const count = products.filter(item =>
-        item.type.includes(value) &&
-        (document.querySelector(".custom-radio__field[name='status']:checked").value === 'all-item' || isAvailable(item))
+      const countElement = checkbox.nextElementSibling.querySelector(
+        ".custom-checkbox__count",
+      );
+      const count = products.filter(
+        (item) =>
+          item.type.includes(value) &&
+          (document.querySelector(".custom-radio__field[name='status']:checked")
+            .value === "all-item" ||
+            isAvailable(item)),
       ).length;
       countElement.textContent = count;
     });
   };
 
-  checkboxes.forEach(checkbox => {
-    checkbox.addEventListener('change', () => {
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", () => {
       renderProducts(filterProducts());
     });
   });
 
-  availabilityRadios.forEach(radio => {
-    radio.addEventListener('change', () => {
+  availabilityRadios.forEach((radio) => {
+    radio.addEventListener("change", () => {
       renderProducts(filterProducts());
     });
   });
 
-  sortSelect.addEventListener('change', () => {
+  sortSelect.addEventListener("change", () => {
     renderProducts(filterProducts());
   });
 

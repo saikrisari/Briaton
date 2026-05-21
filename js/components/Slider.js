@@ -1,15 +1,19 @@
 export const renderProductsOfDay = async () => {
-    const response = await fetch('./data/data.json');
-    const products = await response.json();
+  const response = await fetch("./data/data.json");
+  const products = await response.json();
 
-    const productsOfDayList = document.querySelector('.day-products__list.swiper-wrapper');
+  const productsOfDayList = document.querySelector(
+    ".day-products__list.swiper-wrapper",
+  );
 
-    const productsOfDay = products.filter(product => product.goodsOfDay === true);
+  const productsOfDay = products.filter(
+    (product) => product.goodsOfDay === true,
+  );
 
-    productsOfDay.forEach(product => {
-        const productItem = document.createElement('li');
-        productItem.classList.add('day-products__item', 'swiper-slide');
-        productItem.innerHTML = `
+  productsOfDay.forEach((product) => {
+    const productItem = document.createElement("li");
+    productItem.classList.add("day-products__item", "swiper-slide");
+    productItem.innerHTML = `
       <div class='product-card product-card--small'>
         <div class='product-card__visual'>
           <img
@@ -75,19 +79,18 @@ export const renderProductsOfDay = async () => {
         </div>
       </div>
     `;
-        productsOfDayList.append(productItem);
-    });
+    productsOfDayList.append(productItem);
+  });
 };
 
 export function initSlider() {
-
-    const selector = '.day-products__slider';
-    new Swiper(selector, {
-        slidesPerView: 4,
-        spaceBetween: 40,
-        navigation: {
-            prevEl: '.day-products__navigation-btn--prev',
-            nextEl: '.day-products__navigation-btn--next',
-        },
-    });
+  const selector = ".day-products__slider";
+  new Swiper(selector, {
+    slidesPerView: 4,
+    spaceBetween: 40,
+    navigation: {
+      prevEl: ".day-products__navigation-btn--prev",
+      nextEl: ".day-products__navigation-btn--next",
+    },
+  });
 }
